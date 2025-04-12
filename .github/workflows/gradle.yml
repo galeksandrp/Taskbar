@@ -27,3 +27,9 @@ jobs:
       with:
         name: Debug
         path: app/build/outputs/apk/free/debug
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: vlatest
+        files: app/build/outputs/apk/free/debug/*.apk
