@@ -83,6 +83,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             manifestPlaceholders = [appName: "@string/tb_app_name_debug"]
+            signingConfig signingConfigs.release
         }
 
         release {
