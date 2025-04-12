@@ -1712,7 +1712,7 @@ public class U {
 
     public static int getOverlayType() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                ? (true ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY)
                 : WindowManager.LayoutParams.TYPE_PHONE;
     }
 

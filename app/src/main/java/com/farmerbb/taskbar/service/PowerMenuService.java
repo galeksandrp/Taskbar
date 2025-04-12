@@ -19,15 +19,22 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.farmerbb.taskbar.R;
+import com.farmerbb.taskbar.ui.StartMenuController;
+import com.farmerbb.taskbar.ui.TaskbarController;
+import com.farmerbb.taskbar.ui.UIHost;
+import com.farmerbb.taskbar.ui.ViewParams;
 import com.farmerbb.taskbar.util.U;
 
 import static com.farmerbb.taskbar.util.Constants.*;
 
-public class PowerMenuService extends AccessibilityService {
+public class PowerMenuService extends AccessibilityService implements UIHost {
 
+    private WindowManager windowManager;
     private final BroadcastReceiver powerMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -55,5 +62,39 @@ public class PowerMenuService extends AccessibilityService {
         super.onDestroy();
 
         U.unregisterReceiver(this, powerMenuReceiver);
+    }
+
+    @Override
+    public void addView(View view, ViewParams params) {
+        windowManager.addView(view, params.toWindowManagerParams());
+    }
+
+    @Override
+    public void terminate() {
+        // no-op
+    }
+
+    @Override
+    public void removeView(View view) {
+        windowManager.removeView(view);
+    }
+
+    @Override
+    public void updateViewLayout(View view, ViewParams params) {
+        windowManager.updateViewLayout(view, params.toWindowManagerParams());
+    }
+
+    @Override
+    public void onServiceConnected() {
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        stopService(new Intent(this, TaskbarService.class));
+        stopService(new Intent(this, StartMenuService.class));
+
+        TaskbarController taskbarController = new TaskbarController(this);
+        StartMenuController startMenuController = new StartMenuController(this);
+
+        taskbarController.onCreateHost(this);
+        startMenuController.onCreateHost(this);
     }
 }
