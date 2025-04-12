@@ -1035,7 +1035,7 @@ public class U {
                     return launchMode1(context, type, view, 4);
                 break;
             case "large":
-                return launchMode1(context, type, view, 8);
+                return launchMode1(context, type, view, 16);
             case "fullscreen":
                 return launchMode2(context, MAXIMIZED, type, view);
             case "half_left":
